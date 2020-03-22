@@ -1,4 +1,4 @@
-package vietnamese.crawler;
+package vietnamese.crawler.rss;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

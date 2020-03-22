@@ -1,4 +1,4 @@
-package vietnamese.crawler;
+package vietnamese.crawler.notrss;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,10 +7,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import vietnamese.crawler.Util;
+
 public class ReadZingNews {
-	public ArrayList<String> doInBackground(String string) {
+	public static String ZING = "https://news.zing.vn/";
+
+	public ArrayList<String> crawl() {
 		ArrayList<String> arrLink = new ArrayList<>();
-		String url = string;
+		String url = ZING;
 		Document webPage = null;
 		Elements pageText;
 
@@ -21,24 +25,15 @@ public class ReadZingNews {
 		}
 
 		if (webPage != null) {
+			System.out.println(url);
 			pageText = webPage.select("article").select("header").select("p").select("a");
 			for (int i = 0; i < pageText.size(); i++) {
 				String link = "https://news.zing.vn" + pageText.get(i).attr("href").toString();
-				if(checkURL(link, arrLink))
-					continue;
-				arrLink.add(link);
+				Util.checkUrlExist(link, arrLink);
 			}
 		} else {
 			return null;
 		}
 		return arrLink;
-	}
-
-	private boolean checkURL(String url, ArrayList<String> list) {
-		for (String link : list) {
-			if (url.equals(link))
-				return true;
-		}
-		return false;
 	}
 }
