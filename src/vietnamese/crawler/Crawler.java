@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import vietnamese.crawler.notrss.ReadNotRss;
 import vietnamese.crawler.rss.ReadRss;
@@ -53,7 +55,8 @@ public class Crawler {
 		BufferedReader br;
 		String st = "";
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
+			br = new BufferedReader(new InputStreamReader(
+					new FileInputStream(f), "UTF8"));
 			while ((st = br.readLine()) != null) {
 				vietnameseList.add(st);
 			}
@@ -71,7 +74,8 @@ public class Crawler {
 		}
 		Arrays.sort(mWordHashcodeList);
 		vietnameseList.toArray(mVietnameseList);
-		System.out.println("initVietnameseDictionary END: " + vietnameseList.size() + " - " + mVietnameseList.length);
+		System.out.println("initVietnameseDictionary END: "
+				+ vietnameseList.size() + " - " + mVietnameseList.length);
 	}
 
 	private void initURL() {
@@ -83,7 +87,8 @@ public class Crawler {
 		BufferedReader br = null;
 		String st = "";
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
+			br = new BufferedReader(new InputStreamReader(
+					new FileInputStream(f), "UTF8"));
 			while ((st = br.readLine()) != null) {
 				mUrlCrawledList.add(st);
 			}
@@ -103,18 +108,20 @@ public class Crawler {
 		}
 		Collections.sort(mUrlCrawledList);
 
-		this.mUrlCrawledList = (String[]) mUrlCrawledList.toArray(new String[0]);
+		this.mUrlCrawledList = (String[]) mUrlCrawledList
+				.toArray(new String[0]);
 	}
 
 	private void initNotVietnameseMap() {
 		mMap = new HashMap<String, Integer>();
-		File f = new File(NON_VIETNAMESE_STATICS_WORD);
+		File f = new File("");
 		if (!f.exists())
 			return;
 		BufferedReader br = null;
 		String st = "";
 		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
+			br = new BufferedReader(new InputStreamReader(
+					new FileInputStream(f), "UTF8"));
 			while ((st = br.readLine()) != null) {
 				if (!st.contains(":")) {
 					System.out.println("initNotVietnameseMap load ERR: " + st);
@@ -150,7 +157,7 @@ public class Crawler {
 	private void crawl() {
 		ArrayList<String> link = new ArrayList<String>();
 
-		checkUrlCrawled(new ReadRss().crawl(), link);
+		// checkUrlCrawled(new ReadRss().crawl(), link);
 		checkUrlCrawled(new ReadNotRss().crawl(), link);
 
 		Collections.sort(link);
@@ -159,20 +166,43 @@ public class Crawler {
 		for (int i = 0; i < link.size(); i++) {
 			String url = link.get(i);
 			try {
-				System.out.println("crawl executing " + i + "/" + link.size() + ": " + url);
+				System.out.println("crawl executing " + i + "/" + link.size()
+						+ ": " + url);
 				Document document = Jsoup.connect(url).get();
-				String[] text = document.body().text().
+
+				Elements elements;
+				elements = document.getElementsByTag("header");
+				for (int ji = 0; ji < elements.size(); ji++) {
+					elements.get(ji).remove();
+				}
+				elements = document.getElementsByTag("footer");
+				for (int ji = 0; ji < elements.size(); ji++) {
+					elements.get(ji).remove();
+				}
+
+				elements = document.getElementsByTag("p");
+				StringBuilder builder = new StringBuilder();
+				for (int ji = 0; ji < elements.size(); ji++) {
+					builder.append(getString(elements.get(ji))).append(" ");
+				}
+				String[] text = builder.toString().
 				// replaceAll(Pattern.quote("\\t"), " ").
 				// replaceAll(Pattern.quote("\\n"), " ").
 						replaceAll("\\s+", " ").trim().toLowerCase().split(" ");
 				for (String string : text) {
 					String s = Util.check(string);
 					if (s == null) {
-						System.out.println("!containLetter: " + string);
+//						System.out.println("!containLetter: " + string);
 						continue;
 					}
+					if (s.contains("25/3")) {
+						Util.check(string);
+					}
+					if (s.length() != string.length() && !isVietnameseWord(s)) {
+						System.out.println("!containLetter: " + s + " \t\t\t\t " + string);
+						Util.check(string);
+					}
 					if (!isVietnameseWord(s)) {
-
 						if (mMap.containsKey(s)) {
 							mMap.put(s, mMap.get(s) + 1);
 						} else {
@@ -185,23 +215,36 @@ public class Crawler {
 				e.printStackTrace();
 			}
 		}
-		List<String> crawledLink = new ArrayList<String>(Arrays.asList(mUrlCrawledList));
+		List<String> crawledLink = new ArrayList<String>(
+				Arrays.asList(mUrlCrawledList));
 		crawledLink.addAll(link);
-		saveURL(crawledLink);
+//		saveURL(crawledLink);
 
 		System.out.println("crawl END: " + mMap.size());
-		List<Map.Entry<String, Integer>> list = new LinkedList<>(mMap.entrySet());
+		List<Map.Entry<String, Integer>> list = new LinkedList<>(
+				mMap.entrySet());
 
 		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
 			@Override
-			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+			public int compare(Map.Entry<String, Integer> o1,
+					Map.Entry<String, Integer> o2) {
 				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
 		saveNotVietnamese(list);
 	}
 
-	private void checkUrlCrawled(ArrayList<String> list, ArrayList<String> target) {
+	private String getString(Element element) {
+		StringBuilder builder = new StringBuilder(element.ownText())
+				.append(" ");
+		for (int i = 0; i < element.childrenSize(); i++) {
+			builder.append(getString(element.child(i))).append(" ");
+		}
+		return builder.toString();
+	}
+
+	private void checkUrlCrawled(ArrayList<String> list,
+			ArrayList<String> target) {
 		ArrayList<String> newList = new ArrayList<String>();
 		for (String url : list) {
 			if (!isUrlCrawled(url))

@@ -11,8 +11,8 @@ public class ReadNotRss {
 		ReadZingNews readZing = new ReadZingNews();
 		Util.checkUrlExist(readZing.crawl(), arrayList);
 
-		ReadNotValidateRss readNotValidateRss = new ReadNotValidateRss();
-		Util.checkUrlExist(readNotValidateRss.crawl(), arrayList);
+//		ReadNotValidateRss readNotValidateRss = new ReadNotValidateRss();
+//		Util.checkUrlExist(readNotValidateRss.crawl(), arrayList);
 
 		return arrayList;
 	}
