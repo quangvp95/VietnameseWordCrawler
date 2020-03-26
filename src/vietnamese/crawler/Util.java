@@ -52,12 +52,12 @@ public class Util {
 		return s;
 	}
 
-	private static final String NOT_CHAR = ",\".(){}[]!@#$%^&*()~`=-+_\\|,./<>?'”;:";
+	private static final String NOT_CHAR = ",\".(){}[]!@#$%^&*()~`=-+_\\|,./<>?'“”–;:…";
 	static boolean isLetter(char c) {
 		return !NOT_CHAR.contains(c + "");
 	}
 
-	private static final String ONLY_DIGIT = "1234567890/*-+.:";
+	private static final String ONLY_DIGIT = "1234567890/*-+.:,";
 	static boolean isDigit(char c) {
 		return ONLY_DIGIT.contains(c + "");
 	}
