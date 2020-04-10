@@ -1,0 +1,8 @@
+# Khác
+['w', 'oát'],
+['kwh', 'ki_lô_oát giờ'],
+['megawatt', 'mê_ga_oát'],
+['kw', 'ki_lô_oát'],
+['mwp', 'mê_ga_oát_pích'],
+['volt', 'vôn'],
+['gigawatt', 'ghi_ga_goát']

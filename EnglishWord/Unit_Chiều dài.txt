@@ -1,0 +1,9 @@
+# Chiều dài
+['m', 'mét'],
+['km', 'ki_lô_mét'],
+['inch', 'inh'],
+['mm', 'mi_li_mét'],
+['cm', 'xăng_ti_mét'],
+['dm', 'đề_xi_mét'],
+['nm', 'na_nô_mét'],
+['ha', 'héc ta']

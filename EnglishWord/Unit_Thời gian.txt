@@ -1,0 +1,8 @@
+# Thời gian
+['am', 'ây_em'],
+['gmt', 'gờ_mờ_tê'],
+['p', 'phút'],
+['day', 'đây'],
+['week', 'guých'],
+['minute', 'mi_nít'],
+['pm', 'pi_em']

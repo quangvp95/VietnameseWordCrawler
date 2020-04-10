@@ -74,7 +74,7 @@ public class Crawler {
 		}
 		Arrays.sort(mWordHashcodeList);
 		vietnameseList.toArray(mVietnameseList);
-		System.out.println("initVietnameseDictionary END: "
+		Util.showLog("initVietnameseDictionary END: "
 				+ vietnameseList.size() + " - " + mVietnameseList.length);
 	}
 
@@ -114,7 +114,7 @@ public class Crawler {
 
 	private void initNotVietnameseMap() {
 		mMap = new HashMap<String, Integer>();
-		File f = new File("");
+		File f = new File(NON_VIETNAMESE_STATICS_WORD);
 		if (!f.exists())
 			return;
 		BufferedReader br = null;
@@ -124,7 +124,7 @@ public class Crawler {
 					new FileInputStream(f), "UTF8"));
 			while ((st = br.readLine()) != null) {
 				if (!st.contains(":")) {
-					System.out.println("initNotVietnameseMap load ERR: " + st);
+					Util.showLog("initNotVietnameseMap load ERR: " + st);
 					continue;
 				}
 				try {
@@ -134,7 +134,7 @@ public class Crawler {
 					mMap.put(key, value);
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("initNotVietnameseMap load ERR: " + st);
+					Util.showLog("initNotVietnameseMap load ERR: " + st);
 					continue;
 				}
 			}
@@ -157,16 +157,16 @@ public class Crawler {
 	private void crawl() {
 		ArrayList<String> link = new ArrayList<String>();
 
-		// checkUrlCrawled(new ReadRss().crawl(), link);
+		checkUrlCrawled(new ReadRss().crawl(), link);
 		checkUrlCrawled(new ReadNotRss().crawl(), link);
 
 		Collections.sort(link);
-		System.out.println("crawl readRss: " + link.size());
+		Util.showLog("crawl readRss: " + link.size());
 
 		for (int i = 0; i < link.size(); i++) {
 			String url = link.get(i);
 			try {
-				System.out.println("crawl executing " + i + "/" + link.size()
+				Util.showLog("crawl executing " + i + "/" + link.size()
 						+ ": " + url);
 				Document document = Jsoup.connect(url).get();
 
@@ -192,14 +192,14 @@ public class Crawler {
 				for (String string : text) {
 					String s = Util.check(string);
 					if (s == null) {
-//						System.out.println("!containLetter: " + string);
+						Util.showLog("!containLetter: " + string);
 						continue;
 					}
-					if (s.contains("25/3")) {
+					if (s.length() != string.length() && !isVietnameseWord(s)) {
+						Util.showLog("!diff Length: " + s + " \t\t\t\t " + string);
 						Util.check(string);
 					}
-					if (s.length() != string.length() && !isVietnameseWord(s)) {
-						System.out.println("!containLetter: " + s + " \t\t\t\t " + string);
+					if (s.contains("gp-btttt")) {
 						Util.check(string);
 					}
 					if (!isVietnameseWord(s)) {
@@ -218,9 +218,9 @@ public class Crawler {
 		List<String> crawledLink = new ArrayList<String>(
 				Arrays.asList(mUrlCrawledList));
 		crawledLink.addAll(link);
-//		saveURL(crawledLink);
+		saveURL(crawledLink);
 
-		System.out.println("crawl END: " + mMap.size());
+		Util.showLog("crawl END: " + mMap.size(), true);
 		List<Map.Entry<String, Integer>> list = new LinkedList<>(
 				mMap.entrySet());
 

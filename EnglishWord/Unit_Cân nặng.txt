@@ -1,0 +1,7 @@
+# Cân nặng
+['pound', 'pao'],
+['khoi', 'khối'],
+['kg', 'ki_lô_gam'],
+['tonnes', 'tấn'],
+['ml', 'mi_li_lít'],
+['g', 'gam']

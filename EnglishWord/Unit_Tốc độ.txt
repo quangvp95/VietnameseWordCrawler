@@ -1,0 +1,4 @@
+# Tốc độ
+['speed', 'xờ_pít'],
+['km/h', 'ki_lô_mét trên giờ'],
+['m/s', 'mét_trên_giây']
