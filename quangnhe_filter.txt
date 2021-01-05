@@ -1,0 +1,24 @@
+[Adblock Plus 2.0]
+! Version: 202008141130
+! Title: CocCoc White List
+! CocCoc White List
+! Last modified: 14 Aug 2020 11:30 UTC+7
+! Expires: 1 hour
+! Copyright: CocCoc
+!
+@@||coccoc.com$document
+@@||coccoc.vn$document
+@@||corom.vn$document
+@@||qccoccocmedia.vn$document
+@@||qccoccocmedia.com$document
+@@||itim.vn$document
+@@||serving-sys.com$document
+@@||google.com$document
+@@||google.com.vn$document
+@@||fbsbx.com/instant-bundle/*/jwplayer/*.js$script,domain=javhd.pro
+@@||cdn.tgdd.vn/qcao/*$domain=dienmayxanh.com|thegioididong.com
+@@||youtube.com$document
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js?v=2018110811
+@@||dantri.com.vn$document
+@@||vnexpress.com.vn$document
+@@||quangnhe.com.vn$document
