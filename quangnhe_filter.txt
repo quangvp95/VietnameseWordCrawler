@@ -20,5 +20,5 @@
 @@||youtube.com$document
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js?v=2018110811
 @@||dantri.com.vn$document
-@@||vnexpress.n$document
+@@||vnexpress.net$document
 @@||quangnhe.com.vn$document
